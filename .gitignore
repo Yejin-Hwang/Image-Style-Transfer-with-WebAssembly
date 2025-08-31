@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Rust/WASM build artifacts
+wasm/wasm-math/target/
+wasm/wasm-math/pkg/
+src/wasm-math/
+*.wasm
+*.d.ts

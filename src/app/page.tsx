@@ -1,14 +1,35 @@
 "use client";
 import useWasm from "@/hooks/useWasm";
 import { useState } from "react";
+
 export default function Home() {
-  const wasm = useWasm();
+  const { wasm, isLoading, error } = useWasm();
   const [input, setInput] = useState(10);
   const [result, setResult] = useState<number | null>(null);
+
   const computeFactorial = () => {
     if (!wasm) return;
     setResult(wasm.factorial(input));
   };
+
+  if (isLoading) {
+    return (
+      <main className="min-h-screen p-24">
+        <h1 className="text-4xl font-bold mb-8">Next.js + WASM = 🔥</h1>
+        <p className="text-lg">Loading WASM module...</p>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="min-h-screen p-24">
+        <h1 className="text-4xl font-bold mb-8">Next.js + WASM = 🔥</h1>
+        <p className="text-lg text-red-600">Error: {error}</p>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen p-24">
       <h1 className="text-4xl font-bold mb-8">Next.js + WASM = 🔥</h1>
