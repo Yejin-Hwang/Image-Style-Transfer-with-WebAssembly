@@ -1,5 +1,6 @@
 // src/hooks/useWasm.ts
 import { useState, useEffect } from "react";
+
 export default function useWasm() {
   const [wasm, setWasm] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -11,10 +12,10 @@ export default function useWasm() {
         setIsLoading(true);
         setError(null);
         
-        // WASM 모듈 import
-        const wasmModule = await import("../wasm-math/wasm_math");
+        // Load WASM module using dynamic import
+        const wasmModule = await import("../../public/wasm_math.js");
         
-        // WASM 초기화
+        // Initialize WASM
         const wasmInstance = await wasmModule.default();
         
         setWasm(wasmInstance);
