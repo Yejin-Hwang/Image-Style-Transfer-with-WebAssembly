@@ -2,16 +2,11 @@
 
 import React from 'react'
 
-export interface StyleTransferResult {
-  originalImage: string
-  styledImage: string | null
-  processingTime: number | null
-  error: string | null
-}
+import { type StyleTransferResult } from '@/hooks/useStyleTransfer'
 
 interface StyleTransferResultProps {
   result: StyleTransferResult
-  originalPreviewUrl: string
+  onClear: () => void
 }
 
 export function StyleTransferResult({ result, originalPreviewUrl }: StyleTransferResultProps) {

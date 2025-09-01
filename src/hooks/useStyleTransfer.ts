@@ -45,7 +45,7 @@ function getArrayMinMax(array: Float32Array): { min: number; max: number } {
   for (let i = 1; i < array.length; i++) {
     if (array[i] < min) min = array[i]
     if (array[i] > max) max = array[i]
-  }le
+  }
   
   return { min, max }
 }
