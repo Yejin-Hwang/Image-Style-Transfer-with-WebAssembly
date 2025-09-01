@@ -1,4 +1,4 @@
-let wasm;
+ㅐlet wasm;
 
 /**
  * @param {number} n
