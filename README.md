@@ -4,16 +4,14 @@ A modern web application for AI-powered image style transfer using **ONNX Runtim
 
 ![Style Transfer Demo](https://img.shields.io/badge/Demo-Live-brightgreen) ![Next.js](https://img.shields.io/badge/Next.js-14-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![ONNX](https://img.shields.io/badge/ONNX-Runtime-orange) ![WebAssembly](https://img.shields.io/badge/WebAssembly-Enabled-purple)
 
-## 🌟 Live Demo
 
-**🚀 [Try it live here!](https://image-style-transfer-wasm.vercel.app)** *(Deploy and update this link)*
 
 ### 📱 Demo Screenshots
 
 #### Style Transfer Results
 | Original | Anime (Ghibli) | Anime (Shinkai) |
 |----------|----------------|-----------------|
-| ![Original](docs/images/demo-original.jpg) | ![Ghibli](docs/images/demo-ghibli.jpg) | ![Shinkai](docs/images/demo-shinkai.jpg) |
+| <img src="docs/images/original.png" width="200" height="200" style="object-fit: cover;"> | <img src="docs/images/ghibli.jpeg" width="200" height="200" style="object-fit: cover;"> | <img src="docs/images/shinkai.jpeg" width="200" height="200" style="object-fit: cover;"> |
 
 #### User Interface
 | Upload Interface | Processing Status | Results & Download |

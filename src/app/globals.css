@@ -2,7 +2,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #000000;
 }
 
 @theme inline {
@@ -12,15 +12,49 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background: #ffffff;
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* 텍스트 색상 기본값 설정 (상태 색상 제외) */
+h1, h2, h3, h4, h5, h6, p, div, label {
+  color: #000000 !important;
+}
+
+/* span은 상태 색상을 보존하기 위해 조건부 적용 */
+span:not(.text-green-600):not(.text-yellow-600):not(.text-orange-600):not(.text-blue-600):not(.text-blue-700):not(.text-blue-800):not(.text-white) {
+  color: #000000 !important;
+}
+
+/* 흰색 텍스트 보호 */
+.text-white {
+  color: #ffffff !important;
+}
+
+/* 상태 색상 유지 */
+.text-green-600 {
+  color: #16a34a !important;
+}
+
+.text-orange-600 {
+  color: #ea580c !important;
+}
+
+.text-yellow-600 {
+  color: #ca8a04 !important;
+}
+
+/* 파란색 텍스트 강제 적용 */
+.text-blue-700 {
+  color: #1d4ed8 !important;
+}
+
+.text-blue-600 {
+  color: #2563eb !important;
+}
+
+.text-blue-800 {
+  color: #1e40af !important;
 }

@@ -148,10 +148,10 @@ export default function Home() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-black mb-4">
             Image Style Transfer with WebAssembly
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-black">
             Upload an image and apply artistic styles using ONNX models
           </p>
         </div>
@@ -161,16 +161,16 @@ export default function Home() {
           <div className="space-y-6">
             {/* File Upload */}
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-              <h2 className="text-xl font-semibold mb-4">Upload Image</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-700">Upload Image</h2>
               <label className="block">
-                <span className="block text-sm font-medium text-gray-700 mb-2">
+                <span className="block text-sm font-medium text-black mb-2">
                   Select an image file
                 </span>
                 <input
                   type="file"
                   accept="image/*"
                   onChange={handleFileChange}
-                  className="block w-full text-sm text-gray-500
+                  className="block w-full text-sm text-black
                     file:mr-4 file:py-2 file:px-4
                     file:rounded file:border-0
                     file:text-sm file:font-semibold
@@ -178,7 +178,7 @@ export default function Home() {
                     hover:file:bg-blue-100
                     border border-gray-300 rounded-md"
                 />
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-black">
                   Supported formats: JPG, PNG, WebP, BMP (max 10MB)
                 </p>
               </label>
@@ -186,13 +186,13 @@ export default function Home() {
 
             {/* Preprocessing Options */}
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-              <h2 className="text-xl font-semibold mb-4">Preprocessing Options</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-700">Preprocessing Options</h2>
               {currentModelConfig && (
                 <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
-                  <p className="text-sm text-blue-800">
+                  <p className="text-sm text-blue-700 font-semibold" style={{color: '#1d4ed8'}}>
                     <strong>Model:</strong> {currentModelConfig.name}
                   </p>
-                  <p className="text-sm text-blue-700">
+                  <p className="text-sm text-blue-600" style={{color: '#2563eb'}}>
                     Optimal input size: {currentModelConfig.inputShape[3]} × {currentModelConfig.inputShape[2]}
                   </p>
                 </div>
@@ -200,7 +200,7 @@ export default function Home() {
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-black mb-1">
                       Target Width
                     </label>
                     <input
@@ -214,7 +214,7 @@ export default function Home() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-black mb-1">
                       Target Height
                     </label>
                     <input
@@ -237,13 +237,13 @@ export default function Home() {
                     onChange={(e) => handleOptionChange('normalize', e.target.checked)}
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                   />
-                  <label htmlFor="normalize" className="ml-2 block text-sm text-gray-700">
+                  <label htmlFor="normalize" className="ml-2 block text-sm text-black">
                     Normalize with ImageNet mean/std
                   </label>
                 </div>
 
                 {currentModelConfig && (
-                  <div className="text-xs text-gray-600">
+                  <div className="text-xs text-black">
                     <p>Mean: [{preprocessingOptions.mean?.join(', ')}]</p>
                     <p>Std: [{preprocessingOptions.std?.join(', ')}]</p>
                   </div>
@@ -253,7 +253,7 @@ export default function Home() {
 
             {/* Style Selection */}
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-              <h2 className="text-xl font-semibold mb-4">Choose Style</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-700">Choose Style</h2>
               <select
                 value={selectedStyle}
                 onChange={handleStyleChange}
@@ -265,15 +265,15 @@ export default function Home() {
                 <option value="mosaic">Mosaic</option>
                 <option value="udnie">Udnie</option>
               </select>
-                              <p className="mt-2 text-sm text-gray-600">
+                              <p className="mt-2 text-sm text-black">
                   Select the artistic style to apply to your image
                 </p>
                 {currentModelConfig && (
                   <div className="mt-3 p-3 bg-blue-50 rounded-md border border-blue-200">
-                    <h4 className="text-sm font-medium text-blue-800 mb-2">
+                    <h4 className="text-sm font-bold text-blue-700 mb-2" style={{color: '#1d4ed8'}}>
                       📐 {currentModelConfig.name} Preprocessing Settings
                     </h4>
-                    <div className="text-xs text-blue-700 space-y-1">
+                    <div className="text-xs text-blue-600 space-y-1 font-medium" style={{color: '#2563eb'}}>
                       <div>• Input size: {currentModelConfig.inputShape[1]}×{currentModelConfig.inputShape[2]}</div>
                       <div>• Normalization: {currentModelConfig.mean[0] === 0.5 ? 'AnimeGAN (-1~1)' : 'ImageNet'}</div>
                       <div>• Aspect ratio: {preprocessingOptions.maintainAspectRatio ? 'Maintained (with padding)' : 'Forced resize'}</div>
@@ -287,7 +287,7 @@ export default function Home() {
           {/* Right Column - Image Preview and Results */}
           <div className="space-y-6">
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-              <h2 className="text-xl font-semibold mb-4">Image Preview & Processing</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-700">Image Preview & Processing</h2>
               <ImagePreview
                 previewUrl={previewUrl || undefined}
                 preprocessedImage={preprocessedImage || undefined}
@@ -305,25 +305,25 @@ export default function Home() {
             {/* Processing Status */}
             {preprocessedImage && (
               <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                <h2 className="text-xl font-semibold mb-4">Ready for Style Transfer</h2>
+                <h2 className="text-xl font-semibold mb-4 text-black">Ready for Style Transfer</h2>
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Image processed:</span>
+                    <span className="text-black">Image processed:</span>
                     <span className="font-medium text-green-600">✓ Ready</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Style selected:</span>
+                    <span className="text-black">Style selected:</span>
                     <span className="font-medium">{selectedStyle}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Model file:</span>
+                    <span className="text-black">Model file:</span>
                     <span className="font-medium text-blue-600">
                       {currentModelConfig?.filename || 'Unknown'}
                     </span>
                   </div>
                   {currentModelConfig && (
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Input shape:</span>
+                      <span className="text-black">Input shape:</span>
                       <span className="font-medium text-blue-600">
                         {currentModelConfig.inputShape.join(' × ')}
                       </span>
@@ -348,7 +348,7 @@ export default function Home() {
                         </div>
                       )}
                     </div>
-                    <p className="text-xs text-gray-500 mt-2 text-center">
+                    <p className="text-xs text-black mt-2 text-center">
                       Style transfer runs automatically when you select a different style
                     </p>
                     
@@ -369,7 +369,7 @@ export default function Home() {
                       >
                         🔧 Manual Trigger (Debug)
                       </button>
-                      <p className="text-xs text-gray-500 mt-1 text-center">
+                      <p className="text-xs text-black mt-1 text-center">
                         Use this if auto-execution doesn&apos;t work
                       </p>
                     </div>
@@ -391,7 +391,7 @@ export default function Home() {
         </div>
 
         {/* Footer Info */}
-        <div className="mt-12 text-center text-sm text-gray-500">
+        <div className="mt-12 text-center text-sm text-black">
           <p>
             Built with Next.js, WebAssembly, and ONNX models for real-time image style transfer
           </p>

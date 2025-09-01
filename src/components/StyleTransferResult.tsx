@@ -105,7 +105,7 @@ export function StyleTransferResult({ result, onClear }: StyleTransferResultProp
         </div>
       )}
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-semibold text-gray-800">Style Transfer Result</h3>
+        <h3 className="text-xl font-semibold text-black">Style Transfer Result</h3>
         <div className="flex items-center gap-3">
           {result.processingTime && (
             <span className="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
@@ -125,7 +125,7 @@ export function StyleTransferResult({ result, onClear }: StyleTransferResultProp
         {/* Original Image */}
         <div>
           <div className="flex justify-between items-center mb-3">
-            <h4 className="text-lg font-medium text-gray-700">Original</h4>
+            <h4 className="text-lg font-medium text-black">Original</h4>
             {result.originalImage && (
               <button
                 onClick={handleSaveOriginal}
@@ -148,7 +148,7 @@ export function StyleTransferResult({ result, onClear }: StyleTransferResultProp
               />
             ) : (
               <div className="w-full h-64 flex items-center justify-center border border-gray-300 rounded-lg bg-gray-50">
-                <span className="text-gray-500">No original image</span>
+                <span className="text-black">No original image</span>
               </div>
             )}
           </div>
@@ -157,7 +157,7 @@ export function StyleTransferResult({ result, onClear }: StyleTransferResultProp
         {/* Styled Image */}
         <div>
           <div className="flex justify-between items-center mb-3">
-            <h4 className="text-lg font-medium text-gray-700">Styled</h4>
+            <h4 className="text-lg font-medium text-black">Styled</h4>
             {result.styledImage && (
               <div className="flex gap-2">
                 <button
@@ -192,7 +192,7 @@ export function StyleTransferResult({ result, onClear }: StyleTransferResultProp
               />
             ) : (
               <div className="w-full h-64 flex items-center justify-center border border-gray-300 rounded-lg bg-gray-50">
-                <div className="text-center text-gray-500">
+                <div className="text-center text-black">
                   <div className="text-4xl mb-2">
                     {result.error ? '❌' : '⏳'}
                   </div>
@@ -220,7 +220,7 @@ export function StyleTransferResult({ result, onClear }: StyleTransferResultProp
         {/* Status Message */}
         {result.statusMessage && (
           <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
-            <div className="text-sm text-gray-700">{result.statusMessage}</div>
+            <div className="text-sm text-black">{result.statusMessage}</div>
           </div>
         )}
 
