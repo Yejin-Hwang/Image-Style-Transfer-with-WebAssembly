@@ -14,7 +14,7 @@ A Next.js application that demonstrates WebAssembly integration with Rust for hi
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone <https://github.com/Yejin-Hwang/Image-Style-Transfer-with-WebAssembly>
    cd Image-Style-Transfer-with-WebAssembly
    ```
 
