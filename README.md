@@ -22,7 +22,7 @@ A modern web application for AI-powered image style transfer using **ONNX Runtim
 
 ![Demo GIF](docs/images/demo.gif)
 
-*✨ Complete workflow: Upload → Process → Transform → Save in under 30 seconds!*
+*✨ Complete workflow: Upload → Process → Transform → Save in under 15 seconds!*
 
 ### ⚡ Performance Metrics
 
