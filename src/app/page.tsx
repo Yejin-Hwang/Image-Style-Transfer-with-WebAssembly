@@ -70,11 +70,11 @@ export default function Home() {
           targetHeight: optimalOptions.targetHeight,
           mean: optimalOptions.mean,
           std: optimalOptions.std,
-          maintainAspectRatio: optimalOptions.maintainAspectRatio, // 모델별 맞춤 설정
-          padding: optimalOptions.padding, // 모델별 맞춤 설정
-          paddingColor: optimalOptions.paddingColor, // 모델별 맞춤 설정
-          interpolation: optimalOptions.interpolation, // 모델별 맞춤 설정
-          outputFormat: optimalOptions.outputFormat // 모델별 맞춤 설정
+          maintainAspectRatio: optimalOptions.maintainAspectRatio, // Model-specific settings
+          padding: optimalOptions.padding, // Model-specific settings
+          paddingColor: optimalOptions.paddingColor, // Model-specific settings
+          interpolation: optimalOptions.interpolation, // Model-specific settings
+          outputFormat: optimalOptions.outputFormat // Model-specific settings
         }
         console.log('📐 Updated preprocessing options for', selectedStyle, ':', newOptions)
         return newOptions
@@ -84,7 +84,7 @@ export default function Home() {
     }
   }, [selectedStyle])
 
-  // 자동 추론 실행 함수
+  // Auto inference execution function
   const tryRunInference = useCallback(async () => {
     if (!preprocessedImage || !currentModelConfig) return
 
@@ -101,7 +101,7 @@ export default function Home() {
     }
   }, [preprocessedImage, currentModelConfig, selectedStyle, transferStyle, previewUrl])
 
-  // 스타일 변경 시 자동 추론 실행
+  // Auto inference on style change
   useEffect(() => {
     console.log('🔄 useEffect triggered:', {
       selectedStyle,
@@ -122,7 +122,7 @@ export default function Home() {
     }
   }, [selectedStyle, preprocessedImage, currentModelConfig, tryRunInference])
 
-  // 이미지 처리 완료 후 자동 추론 실행
+  // Auto inference after image processing completion
   useEffect(() => {
     if (preprocessedImage && currentModelConfig && !styleTransferResult) {
       console.log('🖼️ Image processing completed, triggering auto-inference')
@@ -271,13 +271,13 @@ export default function Home() {
                 {currentModelConfig && (
                   <div className="mt-3 p-3 bg-blue-50 rounded-md border border-blue-200">
                     <h4 className="text-sm font-medium text-blue-800 mb-2">
-                      📐 {currentModelConfig.name} 전처리 설정
+                      📐 {currentModelConfig.name} Preprocessing Settings
                     </h4>
                     <div className="text-xs text-blue-700 space-y-1">
-                      <div>• 입력 크기: {currentModelConfig.inputShape[1]}×{currentModelConfig.inputShape[2]}</div>
-                      <div>• 정규화: {currentModelConfig.mean[0] === 0.5 ? 'AnimeGAN (-1~1)' : 'ImageNet'}</div>
-                      <div>• 비율 유지: {preprocessingOptions.maintainAspectRatio ? '예 (패딩 사용)' : '아니오 (강제 리사이즈)'}</div>
-                      <div>• 보간법: {preprocessingOptions.interpolation}</div>
+                      <div>• Input size: {currentModelConfig.inputShape[1]}×{currentModelConfig.inputShape[2]}</div>
+                      <div>• Normalization: {currentModelConfig.mean[0] === 0.5 ? 'AnimeGAN (-1~1)' : 'ImageNet'}</div>
+                      <div>• Aspect ratio: {preprocessingOptions.maintainAspectRatio ? 'Maintained (with padding)' : 'Forced resize'}</div>
+                      <div>• Interpolation: {preprocessingOptions.interpolation}</div>
                     </div>
                   </div>
                 )}
@@ -289,11 +289,11 @@ export default function Home() {
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
               <h2 className="text-xl font-semibold mb-4">Image Preview & Processing</h2>
               <ImagePreview
-                previewUrl={previewUrl}
-                preprocessedImage={preprocessedImage}
+                previewUrl={previewUrl || undefined}
+                preprocessedImage={preprocessedImage || undefined}
                 isProcessing={isProcessing}
-                error={error}
-                validationError={validationError}
+                error={error || undefined}
+                validationError={validationError || undefined}
                 onProcess={handleProcessImage}
                 onClear={() => {
                   clearImage()

@@ -2,7 +2,7 @@ export interface OnnxModelConfig {
   name: string
   filename: string
   description: string
-  inputShape: [number, number, number, number] // [batch, height, width, channels] - NHWC 형식
+  inputShape: [number, number, number, number] // [batch, height, width, channels] - NHWC format
   mean: number[]
   std: number[]
   supportedFormats: string[]
@@ -14,9 +14,9 @@ export const ONNX_MODELS: Record<string, OnnxModelConfig> = {
     name: "Anime (Ghibli Style)",
     filename: "AnimeGANv3_Hayao_36.onnx",
     description: "Transforms images into Studio Ghibli anime style using Hayao model",
-    inputShape: [1, 512, 512, 3], // NHWC 형식: [batch, height, width, channels] - GitHub releases 기준
-    mean: [0.5, 0.5, 0.5], // AnimeGAN은 -1~1 범위 사용
-    std: [0.5, 0.5, 0.5], // AnimeGAN은 -1~1 범위 사용
+    inputShape: [1, 512, 512, 3], // NHWC format: [batch, height, width, channels] - Based on GitHub releases
+    mean: [0.5, 0.5, 0.5], // AnimeGAN uses -1~1 range
+    std: [0.5, 0.5, 0.5], // AnimeGAN uses -1~1 range
     supportedFormats: ["jpg", "jpeg", "png", "webp"],
     maxInputSize: 512
   },
@@ -24,9 +24,9 @@ export const ONNX_MODELS: Record<string, OnnxModelConfig> = {
     name: "Anime (Shinkai Style)",
     filename: "AnimeGANv3_Shinkai_37.onnx",
     description: "Transforms images into Makoto Shinkai anime style",
-    inputShape: [1, 512, 512, 3], // NHWC 형식: [batch, height, width, channels] - GitHub releases 기준
-    mean: [0.5, 0.5, 0.5], // AnimeGAN은 -1~1 범위 사용
-    std: [0.5, 0.5, 0.5], // AnimeGAN은 -1~1 범위 사용
+    inputShape: [1, 512, 512, 3], // NHWC format: [batch, height, width, channels] - Based on GitHub releases
+    mean: [0.5, 0.5, 0.5], // AnimeGAN uses -1~1 range
+    std: [0.5, 0.5, 0.5], // AnimeGAN uses -1~1 range
     supportedFormats: ["jpg", "jpeg", "png", "webp"],
     maxInputSize: 512
   },
@@ -34,7 +34,7 @@ export const ONNX_MODELS: Record<string, OnnxModelConfig> = {
     name: "Picasso",
     filename: "picasso.onnx",
     description: "Applies Picasso's cubist painting style",
-    inputShape: [1, 3, 224, 224], // NHWC 형식: 모든 모델을 512x512로 통일
+    inputShape: [1, 3, 224, 224], // NHWC format: unify all models to 512x512
     mean: [0.485, 0.456, 0.406],
     std: [0.229, 0.224, 0.225],
     supportedFormats: ["jpg", "jpeg", "png", "webp"],
@@ -44,7 +44,7 @@ export const ONNX_MODELS: Record<string, OnnxModelConfig> = {
     name: "Van Gogh",
     filename: "vangogh.onnx",
     description: "Transforms images into Van Gogh's post-impressionist style",
-    inputShape: [1, 512, 512, 3], // NHWC 형식: 모든 모델을 512x512로 통일
+    inputShape: [1, 512, 512, 3], // NHWC format: unify all models to 512x512
     mean: [0.485, 0.456, 0.406],
     std: [0.229, 0.224, 0.225],
     supportedFormats: ["jpg", "jpeg", "png", "webp"],
@@ -54,7 +54,7 @@ export const ONNX_MODELS: Record<string, OnnxModelConfig> = {
     name: "Cyberpunk",
     filename: "cyberpunk.onnx",
     description: "Applies futuristic cyberpunk aesthetic",
-    inputShape: [1, 512, 512, 3], // NHWC 형식: 모든 모델을 512x512로 통일
+    inputShape: [1, 512, 512, 3], // NHWC format: unify all models to 512x512
     mean: [0.485, 0.456, 0.406],
     std: [0.229, 0.224, 0.225],
     supportedFormats: ["jpg", "jpeg", "png", "webp"],
@@ -94,7 +94,7 @@ export function validateImageForModel(
     }
   }
 
-  // Check dimensions (NHWC 형식: [batch, height, width, channels])
+  // Check dimensions (NHWC format: [batch, height, width, channels])
   const [_, targetHeight, targetWidth, __] = modelConfig.inputShape
   const maxSize = modelConfig.maxInputSize
 
@@ -140,40 +140,40 @@ export function getOptimalPreprocessingOptions(
   interpolation: 'nearest' | 'bilinear' | 'bicubic'
   outputFormat: 'nchw' | 'nhwc'
 } {
-  // NHWC 형식: [batch, height, width, channels]
+  // NHWC format: [batch, height, width, channels]
   const [_, height, width, __] = modelConfig.inputShape
   
-  // AnimeGAN 모델들: 정확한 512x512 필요, 패딩 사용
+  // AnimeGAN models: require exact 512x512, use padding
   if (modelConfig.name.includes('Anime') || modelConfig.name.includes('anime')) {
     return {
       targetWidth: width,
       targetHeight: height,
       mean: modelConfig.mean,
       std: modelConfig.std,
-      maintainAspectRatio: true, // 비율 유지하면서 패딩으로 정사각형 만들기
-      padding: true, // 패딩 사용
-      paddingColor: [0, 0, 0], // 검은색 패딩
-      interpolation: 'bicubic', // 고품질 보간
-      outputFormat: 'nhwc' // NHWC 형식 사용
+      maintainAspectRatio: true, // Maintain aspect ratio while creating square with padding
+      padding: true, // Use padding
+      paddingColor: [0, 0, 0], // Black padding
+      interpolation: 'bicubic', // High quality interpolation
+      outputFormat: 'nhwc' // Use NHWC format
     }
   }
   
-  // Van Gogh, Picasso, Cyberpunk: 정확한 512x512 필요, 강제 리사이즈
+  // Van Gogh, Picasso, Cyberpunk: require exact 512x512, force resize
   if (['van-gogh', 'picasso', 'cyberpunk'].includes(modelConfig.name.toLowerCase())) {
     return {
       targetWidth: width,
       targetHeight: height,
       mean: modelConfig.mean,
       std: modelConfig.std,
-      maintainAspectRatio: false, // 정확한 크기로 강제 리사이즈
-      padding: false, // 패딩 사용 안함
+      maintainAspectRatio: false, // Force resize to exact dimensions
+      padding: false, // Don't use padding
       paddingColor: [0, 0, 0],
-      interpolation: 'bilinear', // 중간 품질 보간
-      outputFormat: 'nhwc' // NHWC 형식 사용
+      interpolation: 'bilinear', // Medium quality interpolation
+      outputFormat: 'nhwc' // Use NHWC format
     }
   }
   
-  // 기본값
+  // Default values
   return {
     targetWidth: width,
     targetHeight: height,

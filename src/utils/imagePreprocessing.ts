@@ -88,7 +88,7 @@ export class ImagePreprocessor {
         ? [1, 3, height, width] // NCHW format
         : [1, height, width, 3] // NHWC format (default)
 
-      // 🚨 Canvas 크기와 타겟 크기가 다르면 강제로 다시 리사이즈
+      // 🚨 Force resize if canvas size differs from target size
       const finalWidth = options.targetWidth || this.DEFAULT_SIZE
       const finalHeight = options.targetHeight || this.DEFAULT_SIZE
       
@@ -98,7 +98,7 @@ export class ImagePreprocessor {
         actualCanvas = this.forceResize(finalCanvas, finalWidth, finalHeight)
       }
       
-      // 강제 리사이즈 후 다시 데이터 추출
+      // Extract data again after force resize
       const finalData = actualCanvas !== finalCanvas 
         ? this.convertToRGBAndNormalize(
             actualCanvas,
@@ -382,7 +382,7 @@ export class ImagePreprocessor {
       [batch, height, width, channels] = modelConfig.inputShape
     }
     
-    // 디버깅: 모든 값 확인
+    // Debug: check all values
     console.log('🔍 DEBUG VALIDATION:', {
       'modelConfig.inputShape': modelConfig.inputShape,
       'isNCHW': isNCHW,
@@ -448,7 +448,7 @@ export class ImagePreprocessor {
   }
 
   /**
-   * 강제로 Canvas를 정확한 크기로 리사이즈
+   * Force resize Canvas to exact dimensions
    */
   private static forceResize(
     sourceCanvas: HTMLCanvasElement,
@@ -461,7 +461,7 @@ export class ImagePreprocessor {
     canvas.width = targetWidth
     canvas.height = targetHeight
     
-    // 고품질 리사이즈
+    // High quality resize
     ctx.imageSmoothingEnabled = true
     ctx.imageSmoothingQuality = 'high'
     

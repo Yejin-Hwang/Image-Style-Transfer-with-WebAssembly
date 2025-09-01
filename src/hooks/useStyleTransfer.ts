@@ -8,7 +8,7 @@ export interface StyleTransferResult {
   styledImage: string | null
   processingTime: number | null
   error: string | null
-  // ONNX 연결 상태 및 처리 방식
+  // ONNX connection status and processing method
   onnxStatus: 'connected' | 'failed' | 'not_attempted'
   processingMethod: 'onnx' | 'simulation' | 'none'
   statusMessage: string
@@ -32,10 +32,10 @@ interface UseStyleTransferReturn {
   clearResult: () => void
 }
 
-// ONNX 모델 캐시
+// ONNX model cache
 const modelCache = new Map<string, ort.InferenceSession>()
 
-// 안전한 배열 최소/최대값 계산 함수
+// Safe array min/max calculation function
 function getArrayMinMax(array: Float32Array): { min: number; max: number } {
   if (array.length === 0) return { min: 0, max: 0 }
   
@@ -71,7 +71,7 @@ export function useStyleTransfer(): UseStyleTransferReturn {
 
       
       try {
-        // 실제 ONNX 모델 추론 시도
+        // Attempt actual ONNX model inference
         console.log('Attempting ONNX model inference...')
         const inferenceResult = await runOnnxInference(preprocessedImage, modelConfig)
         styledImage = inferenceResult.styledImage
@@ -81,19 +81,19 @@ export function useStyleTransfer(): UseStyleTransferReturn {
       } catch (onnxError) {
         console.warn('ONNX inference failed, falling back to simulation:', onnxError)
         
-        // ONNX 실패 시 시뮬레이션으로 fallback
+        // Fallback to simulation when ONNX fails
         styledImage = await simulateStyleTransfer(preprocessedImage, modelConfig)
         console.log('Fallback simulation completed')
       }
       
       const processingTime = performance.now() - startTime
       
-      // ONNX 성공 여부에 따라 상태 설정
+      // Set status based on ONNX success
       const onnxStatus = inputTensor ? 'connected' : 'failed'
       const processingMethod = inputTensor ? 'onnx' : 'simulation'
       const statusMessage = inputTensor 
-        ? 'ONNX 모델 추론이 성공적으로 완료되었습니다.'
-        : 'ONNX 모델 연결에 실패하여 시뮬레이션 결과를 표시합니다.'
+        ? 'ONNX model inference completed successfully.'
+        : 'ONNX model connection failed, showing simulation results.'
       
       setResult({
         originalImage: originalImageUrl || '',
@@ -124,7 +124,7 @@ export function useStyleTransfer(): UseStyleTransferReturn {
         error: errorMessage,
         onnxStatus: 'failed',
         processingMethod: 'none',
-        statusMessage: `스타일 변환에 실패했습니다: ${errorMessage}`
+        statusMessage: `Style transfer failed: ${errorMessage}`
       })
     } finally {
       setIsTransferring(false)
@@ -143,7 +143,7 @@ export function useStyleTransfer(): UseStyleTransferReturn {
   }
 }
 
-// 실제 ONNX 모델 추론 실행
+// Execute actual ONNX model inference
 async function runOnnxInference(
   preprocessedImage: PreprocessedImage,
   modelConfig: OnnxModelConfig
@@ -268,8 +268,7 @@ async function loadModel(filename: string): Promise<ort.InferenceSession> {
     console.log(`✅ Model loaded successfully: ${filename}`)
     console.log(`📊 Model details:`, {
       inputNames: session.inputNames,
-      outputNames: session.outputNames,
-      executionProviders: session.executionProviders
+      outputNames: session.outputNames
     })
     return session
   } catch (error) {
@@ -452,54 +451,54 @@ async function simulateStyleTransfer(
     const x = (i / 3) % preprocessedImage.width
     const y = Math.floor((i / 3) / preprocessedImage.width)
     
-    // 스타일에 따른 색상 변환 시뮬레이션
+    // Color transformation simulation based on style
     let r = Math.round(preprocessedImage.data[i] * 255)
     let g = Math.round(preprocessedImage.data[i + 1] * 255)
     let b = Math.round(preprocessedImage.data[i + 2] * 255)
     
-    // 스타일별 색상 필터 적용
+    // Apply style-specific color filters
     if (modelConfig.name.includes('Anime')) {
-      // Anime 스타일은 시뮬레이션 fallback을 지원하지 않음
-      // 반드시 ONNX 추론을 통해서만 적용되어야 함
+      // Anime style does not support simulation fallback
+      // Must be applied only through ONNX inference
       throw new Error(
-        'Anime 스타일은 public/models 폴더의 Anime ONNX 모델을 직접 사용해야 합니다. ONNX 추론이 실패했습니다.'
+        'Anime style requires direct use of Anime ONNX models in the public/models folder. ONNX inference failed.'
       )
     } else if (modelConfig.name.includes('Picasso')) {
-      // 피카소 스타일: 대비 강화
+      // Picasso style: enhance contrast
       r = r > 128 ? Math.min(255, r * 1.4) : Math.max(0, r * 0.6)
       g = g > 128 ? Math.min(255, g * 1.4) : Math.max(0, g * 0.6)
       b = b > 128 ? Math.min(255, b * 1.4) : Math.max(0, b * 0.6)
     } else if (modelConfig.name.includes('Van Gogh')) {
-      // 반 고흐 스타일: 두꺼운 붓놀림과 소용돌이치는 패턴 시뮬레이션
-      // 위치 기반 파동 효과 (붓놀림 시뮬레이션)
+      // Van Gogh style: thick brushstrokes and swirling pattern simulation
+      // Position-based wave effect (brushstroke simulation)
       const waveX = Math.sin(x * 0.1) * 0.2
       const waveY = Math.cos(y * 0.08) * 0.3
       const intensity = (waveX + waveY) * 0.5 + 1.0
       
-      // 반 고흐 특유의 따뜻한 색감 (노란색, 주황색, 빨간색 강조)
+      // Van Gogh's characteristic warm colors (emphasize yellow, orange, red)
       r = Math.min(255, r * (1.5 + intensity * 0.3))
       g = Math.min(255, g * (1.4 + intensity * 0.2))
       b = Math.max(0, b * (0.6 + intensity * 0.1))
       
-      // 색상 대비 강화
+      // Enhance color contrast
       if (r > 128) r = Math.min(255, r + 25)
       if (g > 128) g = Math.min(255, g + 20)
       b = Math.max(0, b - 40)
       
-      // 반 고흐 스타일의 색상 조화
+      // Van Gogh style color harmony
       const brightness = (r + g + b) / 3
       if (brightness > 150) {
-        // 밝은 부분은 더 따뜻하게
+        // Make bright areas warmer
         r = Math.min(255, r + 15)
         g = Math.min(255, g + 10)
       } else {
-        // 어두운 부분은 더 깊게
+        // Make dark areas deeper
         r = Math.max(0, r - 20)
         g = Math.max(0, g - 15)
         b = Math.max(0, b - 30)
       }
     } else if (modelConfig.name.includes('Cyberpunk')) {
-      // 사이버펑크 스타일: 네온 효과
+      // Cyberpunk style: neon effects
       r = Math.min(255, r * 1.5)
       g = Math.max(0, g * 0.7)
       b = Math.min(255, b * 1.8)
@@ -513,35 +512,35 @@ async function simulateStyleTransfer(
   
   ctx.putImageData(imageData, 0, 0)
   
-  // 스타일별 추가 효과 적용
+  // Apply additional style-specific effects
   if (modelConfig.name.includes('Van Gogh')) {
     applyVanGoghBrushStrokes(ctx, preprocessedImage.width, preprocessedImage.height)
   } else if (modelConfig.name.includes('Anime')) {
     applyAnimeEffects(ctx, preprocessedImage.width, preprocessedImage.height)
   }
   
-  // Canvas를 data URL로 변환
+  // Convert canvas to data URL
   return canvas.toDataURL('image/png')
 }
 
-// 반 고흐 스타일의 붓놀림 효과를 추가하는 함수
+// Function to add Van Gogh style brush stroke effects
 function applyVanGoghBrushStrokes(
   ctx: CanvasRenderingContext2D,
   width: number,
   height: number
 ) {
-  // 붓놀림 효과를 위한 추가 레이어
+  // Additional layer for brush stroke effects
   ctx.globalCompositeOperation = 'overlay'
   ctx.globalAlpha = 0.3
   
-  // 여러 방향의 붓놀림 선 그리기
+  // Draw brush strokes in multiple directions
   for (let i = 0; i < 50; i++) {
     const x = Math.random() * width
     const y = Math.random() * height
     const length = 20 + Math.random() * 40
     const angle = Math.random() * Math.PI * 2
     
-    ctx.strokeStyle = `hsl(${45 + Math.random() * 30}, 70%, 60%)` // 노란색-주황색 계열
+    ctx.strokeStyle = `hsl(${45 + Math.random() * 30}, 70%, 60%)` // Yellow-orange tones
     ctx.lineWidth = 2 + Math.random() * 3
     ctx.lineCap = 'round'
     
@@ -554,22 +553,22 @@ function applyVanGoghBrushStrokes(
     ctx.stroke()
   }
   
-  // 원래 설정으로 복원
+  // Restore original settings
   ctx.globalCompositeOperation = 'source-over'
   ctx.globalAlpha = 1.0
 }
 
-// Anime 스타일 효과를 추가하는 함수
+// Function to add Anime style effects
 function applyAnimeEffects(
   ctx: CanvasRenderingContext2D,
   width: number,
   height: number
 ) {
-  // 부드러운 색상 그라데이션 효과
+  // Soft color gradient effects
   ctx.globalCompositeOperation = 'soft-light'
   ctx.globalAlpha = 0.3
   
-  // 여러 방향의 부드러운 그라데이션
+  // Multiple directional soft gradients
   for (let i = 0; i < 3; i++) {
     const gradient = ctx.createLinearGradient(
       Math.random() * width,
@@ -578,30 +577,30 @@ function applyAnimeEffects(
       Math.random() * height
     )
     
-    // Ghibli 특유의 따뜻한 색상
-    gradient.addColorStop(0, 'rgba(255, 255, 200, 0.1)') // 연한 노란색
-    gradient.addColorStop(0.5, 'rgba(200, 255, 200, 0.1)') // 연한 초록색
-    gradient.addColorStop(1, 'rgba(255, 200, 200, 0.1)') // 연한 빨간색
+    // Ghibli's characteristic warm colors
+    gradient.addColorStop(0, 'rgba(255, 255, 200, 0.1)') // Light yellow
+    gradient.addColorStop(0.5, 'rgba(200, 255, 200, 0.1)') // Light green
+    gradient.addColorStop(1, 'rgba(255, 200, 200, 0.1)') // Light red
     
     ctx.fillStyle = gradient
     ctx.fillRect(0, 0, width, height)
   }
   
-  // 선명한 윤곽선 효과
+  // Sharp outline effects
   ctx.globalCompositeOperation = 'overlay'
   ctx.globalAlpha = 0.2
   
-  // 이미지 가장자리에 부드러운 테두리 추가
+  // Add soft border to image edges
   ctx.strokeStyle = 'rgba(100, 150, 100, 0.3)'
   ctx.lineWidth = 2
   ctx.strokeRect(2, 2, width - 4, height - 4)
   
-  // 원래 설정으로 복원
+  // Restore original settings
   ctx.globalCompositeOperation = 'source-over'
   ctx.globalAlpha = 1.0
 }
 
-// 모델 캐시 정리 (메모리 관리)
+// Clear model cache (memory management)
 export function clearModelCache(): void {
   for (const [filename, session] of modelCache.entries()) {
     try {
